@@ -2,8 +2,30 @@ require 'pjax'
 
 module PjaxRails
   class Engine < ::Rails::Engine
-    initializer "pjax_rails.add_controller" do
-      config.to_prepare { ApplicationController.send :include, Pjax }
+    config.pjax_rails = ActiveSupport::OrderedOptions.new
+
+
+    initializer "pjax_rails.set_configs" do |app|
+      options                           =app.config.pjax_rails
+      options.default_pjax_container ||= "[data-pjax-container]"
+
+      config.to_prepare do 
+        ApplicationController.send :include, Pjax 
+        options.each { |k,v| ApplicationController.send("#{k}=", v) }
+      end
     end
+
+    initializer "pjax_rails.add_controller" do |app|
+      config.to_prepare do
+        ApplicationController.send :include, Pjax
+      end
+    end
+
+    initializer "pjax_rails.compile_config_methods" do
+      ActiveSupport.on_load(:active_record) do
+        config.compile_methods! if config.respond_to?(:compile_methods!)
+      end
+    end
+
   end
 end

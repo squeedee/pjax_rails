@@ -3,9 +3,15 @@ module Pjax
 
   included do
     layout proc { |c| pjax_request? ? pjax_layout : 'application' }
+
     helper_method :pjax_request?
+    helper_method :pjax_container
+
     before_filter :strip_pjax_param
     around_filter :set_pjax_url
+
+    attr_writer :pjax_container
+    cattr_accessor :default_pjax_container
   end
 
   protected
@@ -29,6 +35,10 @@ module Pjax
     def set_pjax_url
       yield
       response.headers['X-PJAX-URL'] = request.url
+    end
+
+    def pjax_container
+      @pjax_container ||= self.class.default_pjax_container 
     end
 
   private
