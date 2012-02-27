@@ -162,7 +162,8 @@ var pjax = $.pjax = function( options ) {
       settings.timeout = 0
     }
 
-    xhr.setRequestHeader('X-PJAX', 'true')
+    xhr.setRequestHeader('X-PJAX', true)
+    xhr.setRequestHeader('X-PJAX-Container', options.container)
 
     var result
 
