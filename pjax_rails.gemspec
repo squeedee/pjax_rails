@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.email   = 'david@loudthinking.com'
   s.summary = 'PJAX integration for Rails 3.1+'
 
-  s.add_dependency 'jquery-rails'
+  s.add_dependency 'jquery'
 
   s.files = Dir["#{File.dirname(__FILE__)}/**/*"]
 end
